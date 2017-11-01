@@ -98,7 +98,7 @@ var Login={
 										else  {
 												console.log('have a set of results');
 
-											    var obj12 = {response:'3',personal_data:rows,members_data:rows1,Test_Results:rows12};
+											    var obj12 = {response:'3',personal_data:rows,member_data:rows1,Test_Results:rows12};
 												res(obj12);
 													  
 											 } 

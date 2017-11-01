@@ -4,10 +4,7 @@ var render = require('render');
 var router = express.Router();
 var TestUrine={
 		
-		getTaskById:function(mail,callback){
-
-		    return db.query("select * from urine where username=?",[mail],callback);
-		},
+		
 		    testResults:function(Test,callback){
 			console.log(Test.Mail);
 			

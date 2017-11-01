@@ -3,13 +3,13 @@ var validator = require('validator');
 var Verify={
 		verifyCustomer:function(Verify,res,callback){
 			if(!validator.isEmail(Verify.Mail)){
-			var query = db.query("select pin,registerd_time from registration where mobile =? ",[Verify.Mail]);
+			var query = db.query("select pin,registerd_time from registration where username =? ",[Verify.Mail]);
 			query.on('error', function(err) {
 			    throw err;
 			});
 			 
 			query.on('fields', function(fields) {
-			    console.log(fields);
+			    //console.log(fields);
 			});
 			 
 			query.on('result', function(row) {
@@ -33,13 +33,13 @@ var Verify={
 								    console.log('Error occured!');
 								    res(err);   
 								    }else if (a > 0) {
-								    	 db.query("update registration set attempt_time=? where mobile =?",[at,Verify.Mail],callback); 
+								    	 db.query("update registration set attempt_time=? where username =?",[at,Verify.Mail],callback); 
 										 var r = {response:'3',message:'OTP verified successfully!!!'};
 										 res(r);
 									  } 
 							           else if (a === 0) {   
 							        	   db.query("insert into login (username,password) values(?,?)",[Verify.Mail,Verify.password]);
-										   db.query("update registration set pinverify = 1, attempt_time=? where mobile =?",[at,Verify.Mail],callback); 
+										   db.query("update registration set pinverify = 1, attempt_time=? where username =?",[at,Verify.Mail],callback); 
 										   var r1={response:'3',message:'OTP verified successfully!!!'};
 										   res(r1);
 							           }
@@ -61,7 +61,7 @@ var Verify={
 			});
 			}
 			else{
-				var query1 = db.query("select pin,registerd_time from registration where mail =? ",[Verify.Mail]);
+				var query1 = db.query("select pin,registerd_time from registration where username =? ",[Verify.Mail]);
 				query1.on('error', function(err) {
 				    throw err;
 				});
@@ -92,13 +92,13 @@ var Verify={
 								    res(err);   
 								    }else if (a > 0) {
 								    	// db.query("update login set password=? where username =?",[Verify.password,Verify.Mail],callback); 
-								    	 db.query("update registration set attempt_time=? where mail =?",[at,Verify.Mail],callback); 
+								    	 db.query("update registration set attempt_time=? where username =?",[at,Verify.Mail],callback); 
 										 var r = {response:'3',message:'OTP verified successfully!!!'};
 										 res(r);
 									  } 
 							           else if (a === 0) {   
 							        	   db.query("insert into login (username,password) values(?,?)",[Verify.Mail,Verify.password]);
-										   db.query("update registration set pinverify = 1, attempt_time=? where mail =?",[at,Verify.Mail],callback); 
+										   db.query("update registration set pinverify = 1, attempt_time=? where username =?",[at,Verify.Mail],callback); 
 										   var r1={response:'3',message:'OTP verified successfully!!!'};
 										   res(r1);
 							           }

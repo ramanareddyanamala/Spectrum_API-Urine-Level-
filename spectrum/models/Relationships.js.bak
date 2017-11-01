@@ -50,7 +50,16 @@ var Member={
             }
             else{
 				console.log('Deleted successfuly');
-				var qc = db.query("delete from relationships where username=? and member_id=?",[Student.Mail, Student.member_id],callback); 
+				var qc = db.query("delete from relationships where username=? and member_id=?",[Student.Mail, Student.member_id]); 
+				qc.on('error',function(err){
+				throw err;
+				});
+
+				qc.on('result',function(row1){
+				console.log('data deleted from table');
+				var r1 = {response:'3',message:'your relationship information has deleted successfully.'};
+			    res(r1);
+				});
 			}
 			});
 			});

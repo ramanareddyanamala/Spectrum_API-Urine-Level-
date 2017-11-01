@@ -78,6 +78,6 @@ var Change={
 				});
 			}
 		}
-};
+	};
 module.exports=Change;
 		
