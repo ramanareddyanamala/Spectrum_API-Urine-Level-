@@ -10,7 +10,7 @@ var Add={
 			
 			console.log(Add);
 
-			if(Add.register_type == 'Manual')
+			if(Add.register_type === 'Manual')
 			{
 
 			if(!validator.isEmail(Add.Mail)){
@@ -140,13 +140,33 @@ var Add={
 						    res(err);   
 					}
 					else if(a>0){
+						var ab =db.query("select register_type from registration where username=?",[Add.Mail],callback);
+
+						ab.on('error', function(err) {
+							    throw err;
+							});
+						
+							ab.on('fields', function(fields) {
+							    console.log(fields);
+							});
+							 
+							    ab.on('result', function(rows) {
+							    console.log(rows.register_type);
+								if(rows.register_type==='Manual'){
 						 console.log('Already registered!!');
 						 var r ={response:'5',message:'Mail already registered!!'};
 						 res(r);
+						}else{
+						 var z ={response:'6',message:' already logged in from scoail-media!!'};
+			        	 res(z);
+						}
+								});
+						
+						
 					}
 					else if(a === 0){
 						
-						var query12 = db.query("select username from registration where  username=?",[Add.Mail],function(err,row,fields){
+						var query12 = db.query("select username from registration where  username=? ",[Add.Mail],function(err,row,fields){
 			        	     console.log(row.length);
 			        	     if(err){
 			        	    	 res(err);
@@ -223,7 +243,6 @@ var Add={
 									    	margin: 4px 2px;
 									    	cursor: pointer;
 									    	}
-
 											.button2 {background-color: #008CBA;} 
 											.button3 {background-color: #f44336;} 
 											.button4 {background-color: #e7e7e7; color: black;} 
@@ -324,8 +343,6 @@ var Add={
 									    						</tr>
 									    					</table>
 									    		</body>
-
-
 										 */ });
 								    	var html = str.replace("%s", text1);
 								    	var html1 = html.replace("%m",Add.Mail);
@@ -365,6 +382,30 @@ var Add={
 						
 			        	   }
 			        	     else if(row.length > 0){
+								 var query0 = db.query("select pin from registration where username =? ",[Add.Mail],callback);
+					    	
+					    	query0.on('error', function(err) {
+							    throw err;
+							});
+							 
+							 
+							query0.on('result', function(rowss) {
+							    console.log('pin value..'+rowss.pin);
+			        	         if(rowss.pin === 'social-media'){
+			        	    	 var e = db.query("select * from registration where username=?",[Add.Mail],function(err,row,fields){
+			        	    		 var d =row.length;
+			        	    		 console.log('socail-media length...'+d);
+			        	    		 if(err){
+			        	    			 console.log(err);
+			        	    			 res(err);
+			        	    		 }else if(d>0){
+			        	    			 console.log('already logged in from scoail-media');
+			        	    			 var z ={response:'6',message:' already logged in from scoail-media!!'};
+			        	    			 res(z);
+			        	    		 }
+			        	    	 });
+			        	    	 }
+			        	       else{
 			        	    	 var text12 = "";
 								 var possible12 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -374,12 +415,10 @@ var Add={
 						    console.log('pin:'+text12);
 						    console.log("inside service");
 						   
-						  //var timeStampInMs1 = window.performance && window.performance.now && window.performance.timing && window.performance.timing.navigationStart ? window.performance.now() + window.performance.timing.navigationStart : Date.now();
-						  //console.log(timeStampInMs1, Date.now());
+						 
 						  var q3 = db.query("update registration set pin = ?, registerd_time =? where username = ?",[text12,Add.RegTime,Add.Mail],function(err,row,fields){
 							  if(err) {
-								    console.log('Error occured!');
-								    var c = {response:'0'};
+								    console.log(err);
 								    res(err);   
 								    }else  {
 								    	var str = multiline(function(){/*
@@ -399,7 +438,6 @@ var Add={
 									    	margin: 4px 2px;
 									    	cursor: pointer;
 									    	}
-
 											.button2 {background-color: #008CBA;} 
 											.button3 {background-color: #f44336;} 
 											.button4 {background-color: #e7e7e7; color: black;} 
@@ -500,8 +538,6 @@ var Add={
 									    						</tr>
 									    					</table>
 									    		</body>
-
-
 											 */ });
 									    	var html = str.replace("%s", text12);
 									    	var html1 = html.replace("%m",Add.Mail);
@@ -534,8 +570,10 @@ var Add={
 										 var r = {response:'3',message:'data has stored successfully!!'};
 										 res(r);
 									  } 
+						  
 						  });
-						
+			        	       }
+							   });
 			        	  }
 			        	     
 						});
@@ -548,54 +586,105 @@ var Add={
 			}else
 				{
 				console.log('social-media');
-				 var query = db.query("select username from registration where  username=?",[Add.Mail],function(err, row, fields) {
+				 var query12 = db.query("select username from registration where  username=?",[Add.Mail],function(err, row, fields) {
 					var a = row.length;
 					console.log(a);
+				
 					if(err) {
 						    console.log('Error occured!');
 						    res(err);   
 						    }else if (a > 0) {
-								 console.log('Have a set of data');
-						var query = db.query("select * from personalinfo where  username=? ",[Add.Mail],function(err, rows, fields) {
-										var a1 = rows.length;
-										console.log('a1..'+a1);
-										if(err) {
-											    console.log('Error occured!');
-											    res(err);   
-											    }
-										else  {
-												console.log('have a set of results');
-												 var obj = {response:'3',personal_data:rows};
-											   
-												var query = db.query("select * from relationships where  username=? ",[Add.Mail],function(err, rows1, fields) {
-										var a12 = rows1.length;
-										console.log('a12..'+a12);
-										if(err) {
-											    console.log('Error occured!');
-											    res(err);   
-											    }
-										else  {
-												console.log('have a set of results');
-											    var obj12 = {response:'3',personal_data:rows,members_data:rows1};
-												console.log(obj12);
-											    res(obj12);
-													  
-											 } 
-								   });
-											   
-													  
-											 } 
-								   });
+								 //console.log(row.register_type);
+								 var query24 = db.query("select * from registration where username =? ",[Add.Mail],callback);
+					    	
+					    	query24.on('error', function(err) {
+							    throw err;
+							});
+							 
+							
+							 
+							query24.on('result', function(row) {
+							    console.log(row.register_type);
+							
+								 if(row.register_type==='Manual'){
+									
+									 var query = db.query("select * from personalinfo where  username=? ",[Add.Mail],function(err, rows, fields) {
+											var a1 = rows.length;
+											console.log('a1..'+a1);
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													console.log('have a set of results');
+													 
+													var query = db.query("select * from relationships where  username=? ",[Add.Mail],function(err, rows1, fields) {
+											var a12 = rows1.length;
+											console.log('a12..'+a12);
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													console.log('have a set of results');
+													 
+												    var obj12 = {response:'4',personal_data:rows,members_data:rows1};
+													console.log(obj12);
+												    res(obj12);
+														  
+												 } 
+									   });
+												   
+														  
+												 } 
+									   });
+
+								 }
+								 else{
+									 var queryc = db.query("select * from personalinfo where  username=? ",[Add.Mail],function(err, rows, fields) {
+											var a1 = rows.length;
+											console.log('a1..'+a1);
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													console.log('have a set of results');
+													 var obj = {response:'3',personal_data:rows};
+												   
+													var query = db.query("select * from relationships where  username=? ",[Add.Mail],function(err, rows1, fields) {
+											var a12 = rows1.length;
+											console.log('a12..'+a12);
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													console.log('have a set of results');
+												    var obj12 = {response:'3',personal_data:rows,members_data:rows1};
+													console.log(obj12);
+												    res(obj12);
+														  
+												 } 
+									   });
+												   
+														  
+												 } 
+									   });
+								 }
+								 });
+						 
 							  } 
 					           else if (a === 0) {   
 
                 
-                            var que2 = db.query("Insert into registration(username,pin,registerd_time,latitude,longitude,attempt_time,register_type,pinverify) values(?,?,?,?,?,?,?,?)",[Add.Mail,'social-media',Add.RegTime,Add.lat,Add.long,'social-media',Add.register_type,'1'],function(err,row,fields){
+                            var que2 = db.query("Insert into registration(username,pin,registerd_time,latitude,longitude,attempt_time,register_type,pinverify) values(?,?,?,?,?,?,?,?)",[Add.Mail,'social-media',Add.RegTime,Add.lat,Add.long,'social-media',Add.register_type,'0'],function(err,row,fields){
 										if(err) {
 											    console.log(err);
 											    res(err);
 											    }else {
-														var query = db.query("select * from personalinfo where  username=? ",[Add.Mail],function(err, rows, fields) {
+										var c = db.query("Insert into login(username,password) values(?,?)",[Add.Mail,'spectrum']);
+										var query = db.query("select * from personalinfo where  username=? ",[Add.Mail],function(err, rows, fields) {
 										var a1 = rows.length;
 										console.log('a1..'+a1);
 										if(err) {
@@ -604,7 +693,7 @@ var Add={
 											    }
 										else  {
 												console.log('have a set of results');
-												 var obj = {response:'3',personal_data:rows};
+												// var obj = {response:'3',personal_data:rows};
 											   // res(obj);
 												var query = db.query("select * from relationships where  username=? ",[Add.Mail],function(err, rows1, fields) {
 										var a12 = rows1.length;
@@ -615,7 +704,7 @@ var Add={
 											    }
 										else  {
 												console.log('have a set of results');
-											    var obj12 = {response:'3',personal_data:rows,Test_Results:rows1};
+											    var obj12 = {response:'3',personal_data:rows,members_data:rows1};
 												console.log(obj12);
 											    res(obj12);
 													  
@@ -636,5 +725,3 @@ var Add={
 			
 };
   module.exports=Add;
-
-		

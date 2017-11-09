@@ -35,7 +35,7 @@ var TestUrine={
 				   var data ="id_";
 					data +=s;
 					console.log(data);
-					return db.query("insert into urine(username,test_id,member_id,latitude,longitude,rbcValue ,billirubinValue,   urobiliogen , ketones ,protein ,nitrite,glucose,ph,sg,leokocit,testedTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[Test.Mail,data,Test.member_id,Test.lat,Test.long,
+					return db.query("insert into urine(username,test_id,member_id,latitude,longitude,rbcValue ,billirubinValue,   urobiliogen , ketones ,protein ,nitrite,glucose,ph,sg,leokocit,testedTime) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[Test.Mail,data,Test.meber_id,Test.lat,Test.long,
 			                                                                                                                                                                                                                                            Test.rbcValue, 
 			                                                                                                                                                                                                                                            Test.billirubinValue, 
 			                                                                                                                                                                                                                                            Test.urobiliogen, 

@@ -69,9 +69,12 @@ var Login={
 							 
 							query.on('result', function(row) {
 							    console.log(row.password);
-							    
+								console.log(Login.Linked);
+				     if(Login.Linked === 'Linked'){
 							   if(row.password === Login.password && (row.username === Login.Mail)){
 								   console.log('Login success!!');
+								   var d = db.query("update registration set register_type=? where username=?",['Linked',Login.Mail]);
+								   
 								   var query = db.query("select * from personalinfo where  username=? ",[Login.Mail],function(err, rows, fields) {
 										
 										if(err) {
@@ -98,7 +101,7 @@ var Login={
 										else  {
 												console.log('have a set of results');
 
-											    var obj12 = {response:'3',personal_data:rows,member_data:rows1,Test_Results:rows12};
+											    var obj12 = {response:'3',personal_data:rows,members_data:rows1,Test_Results:rows12};
 												res(obj12);
 													  
 											 } 
@@ -118,6 +121,59 @@ var Login={
 								   var r1 = {response:'0',message:'Invalid credentials!!!'};
 								   res(r1);
 								  }
+							}else{
+								
+								if(row.password === Login.password && (row.username === Login.Mail)){
+									   console.log('Login success!!');
+									   var d1 = db.query("update registration set register_type=? where username=?",['Linked',Login.Mail]);
+									   
+									   var query1 = db.query("select * from personalinfo where  username=? ",[Login.Mail],function(err, rows, fields) {
+											
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													console.log('have a set of results');
+													 
+											var query = db.query("select * from relationships where  username=? ",[Login.Mail],function(err, rows1, fields) {
+											
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													
+														var query = db.query("select * from urine where  username=? ",[Login.Mail],function(err, rows12, fields) {
+											
+											if(err) {
+												    console.log('Error occured!');
+												    res(err);   
+												    }
+											else  {
+													console.log('have a set of results');
+
+												    var obj12 = {response:'3',personal_data:rows,members_data:rows1,Test_Results:rows12};
+													res(obj12);
+														  
+												 } 
+									   });
+												   
+														  
+												 } 
+									   });
+												   
+														  
+												 } 
+									   });
+									   
+								   }
+								   else{
+									   console.log('Login failed!!');
+									   var r12 = {response:'0',message:'Invalid credentials!!!'};
+									   res(r12);
+									  }
+							}
 							});
 					    	
 					    }

@@ -22,7 +22,7 @@ var Spectrometer={
 		    updateDevice:function(Device,callback){
 		    	console.log(Device.Mail);
 		    	console.log(Device.id);
-		    	return db.query("update spectrometer set battery_percentage=?,spectrometer_name=?,last_sync=?,spectrometer_version=? where username=? and spectrometer_id=?",[Device.Battery_percentage,Device.spectrometer_name,Device.last_sync,Device.spectrometer_version,Device.Mail,Device.id],callback);
+		    	return db.query("update spectrometer set spectrometer_information=?,spectrometer_name=?,last_sync=?,spectrometer_version=? where username=? and spectrometer_id=?",[Device.spectrometer_information,Device.spectrometer_name,Device.last_sync,Device.spectrometer_version,Device.Mail,Device.id],callback);
 		    },
 		    deleteDevice:function(Device,callback){
 		    	console.log(Device.Mail);

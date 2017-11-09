@@ -5,7 +5,7 @@ var dt = dateTime.create();
 var formatted = dt.format('dmY');
 var Member={
 		
-			    updateMember:function(Student,callback){
+			    updateMember:function(Student,res,callback){
 				var dt=new Date();//current date and time of server
 			    var text = "";//random text
 			    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -27,22 +27,37 @@ var Member={
 			   });
 				var k = db.query("update relationships set isactive=? where username=?",[0,Student.Mail]);
 
-			    return  db.query("update relationships set name =?, mail=?,Height=?,Weight=?,DOB=?,relationship=?,Gender=?,Blood_Group=?,AddedTime=?,image=?,isactive=? where username=? and member_id=?",[Student.Name,Student.Email,Student.Height,Student.Weight,Student.DOB,Student.Relationship,Student.Gender,Student.Blood_Group, Student.AddedTime,path1,1,Student.Mail,Student.Member_id],callback);
+			   console.log('get data...'+Student.member_id);
+			   console.log('mail dta..'+Student.Mail);
+			  if(Student.member_id !== 'undefined'){
+				var d =  db.query("update relationships set name =?, mail=?,Height=?,Weight=?,DOB=?,relationship=?,Gender=?,Blood_Group=?,AddedTime=?,image=?,isactive=? where username=? and member_id=?",[Student.Name,Student.Email,Student.Height,Student.Weight,Student.DOB,Student.Relationship,Student.Gender,Student.Blood_Group, Student.AddedTime,path1,1,Student.Mail,Student.member_id],function(err,row){
+				if(err){
+				res(err);
+				}else{
+				 var r1 = {response:'3',message:'your data has successfully updated'};
+			     res(r1);
+				}
+				});
+			   
+			  }else{
+			  var r1 = {response:'0',message:'your pass required data'};
+			     res(r1);
+			  }
 			},
 			
     deleteMember:function(Student,callback){
-
-		var query = db.query("select image from relationships where username =? and member_id=? ",[Student.Mail,Student.member_id]);
-			query.on('error', function(err) {
+			console.log('entered into a method');
+			var m ="";
+			console.log(Student.member_id);
+			console.log(Student.Mail);
+		    var qc = db.query("select image from relationships where username =? and member_id=? ",[Student.Mail,Student.member_id]);
+			qc.on('error', function(err) {
 			    throw err;
+				console.log(err);
 			});
 			 
-			query.on('fields', function(fields) {
-			    //console.log(fields);
-			});
-			 
-			query.on('result', function(row) {
-				console.log(row.image);
+			qc.on('result', function(row) {
+			console.log(row.image);
 		var path='./public'+row.image;
         fs.unlink(path,function(err){
             if(err){
@@ -50,21 +65,14 @@ var Member={
             }
             else{
 				console.log('Deleted successfuly');
-				var qc = db.query("delete from relationships where username=? and member_id=?",[Student.Mail, Student.member_id]); 
-				qc.on('error',function(err){
-				throw err;
-				});
-
-				qc.on('result',function(row1){
-				console.log('data deleted from table');
-				var r1 = {response:'3',message:'your relationship information has deleted successfully.'};
-			    res(r1);
-				});
+				m = Student.member_id;
+			 
 			}
 			});
 			});
-
-           
+			console.log('m value..'+m);
+		 return db.query("delete from relationships where username=? and member_id=?",[Student.Mail, m],callback);
+		   
     },
     
     addMember:function(Student,res,req,callback){

@@ -15,23 +15,6 @@ router.post('/',function(req,res,next){
         	
         }
     });
-
-	
    
-});
-router.put('/',function(req,res,next){
-FetchPersonal.inactive(req.body,function(err,count){
-
-        if(err)
-        {
-            res.json(err);
-			
-        }
-        else{
-            res.json(req.body);
-        	
-        }
-    });
-
 });
 module.exports=router;

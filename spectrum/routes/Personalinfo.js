@@ -37,11 +37,9 @@ router.get('/:mail?',function(req,res,next){
 	});
 	*/
 
-router.put('/:mail',function(req,res,next){
+router.put('/',function(req,res,next){
 
-	
-	
-    Task.updateTask(req.params.mail,req.body,function(err,rows){
+	Task.updateTask(req.body,function(err,rows){
 
         if(err)
         {
@@ -55,21 +53,7 @@ router.put('/:mail',function(req,res,next){
         }
     });
 });
-   router.post('/:mail',function(req,res,next){
-	   
-	   Task.getTaskById(req.body.mail,function(err,rows){
-
-	        if(err)
-	        {
-	            res.json(err);
-	        }
-	        else{
-	        	var obj = {response:'3',data:rows};
-			    
-	            res.json(obj);
-	        }
-	    });
-   });
+   
     router.post('/',function(req,res,next){
     	
         Task.addStudent(req.body,function(err,count){

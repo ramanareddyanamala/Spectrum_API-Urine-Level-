@@ -61,7 +61,7 @@ var Verify={
 			});
 			}
 			else{
-				var query1 = db.query("select pin,registerd_time from registration where username =? ",[Verify.Mail],callback);
+				var query1 = db.query("select pin,registerd_time from registration where username =? ",[Verify.Mail]);
 				query1.on('error', function(err) {
 				    throw err;
 				});

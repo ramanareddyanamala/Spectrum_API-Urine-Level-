@@ -31,7 +31,7 @@ var PersonalInfo = {
 					    res(err);   
 					    }
 				else {
-							 console.log('updated your all members inactive');
+							 console.log('updated your member is active');
 							 var obj = {response:'3'};
 							 res(obj);
 							  
