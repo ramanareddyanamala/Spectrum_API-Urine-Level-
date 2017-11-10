@@ -8,7 +8,7 @@ var cors=require('cors');
 var routes = require('./routes/index');
 var Express = require('express');
 var multer = require('multer');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 
 var Verify = require('./routes/verify');
 var Add=require('./routes/Reg');
@@ -22,6 +22,10 @@ var Personalinfo=require('./routes/Personalinfo');
 var Spectrometer = require('./routes/SpectrometerDevice');
 var Personfetch = require('./routes/PersonalInformationRouter');
 var Device = require('./routes/DeviceInfoFetch');
+var Relationship = require('./routes/Relationships');
+var GetRelation = require('./routes/GetRelationship');
+var Feedback =require('./routes/Feedback');
+var Ramana =require('./routes/Ramana');
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -34,16 +38,19 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: false }));
+//app.use(express.bodyParser());
 app.use(cookieParser());
+app.use('/spectrum/ios/', express.static(__dirname +'/images'));
 app.use(express.static(path.join(__dirname, 'public')));
-//app.use(express.static('/uploads/'));
-/*
+app.use(express.static('/uploads/'));
+app.use('/resource/image/',express.static(__dirname +'/uploads'));
+
 var Storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, "./Images");
+        callback(null, "./uploads");
     },
     filename: function (req, file, callback) {
-        callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+        callback(null,  file.originalname);
     }
 });
 
@@ -61,11 +68,12 @@ app.post("/api/Upload", function (req, res) {
         return res.end("File uploaded sucessfully!.");
     });
 });
-*/
-/*app.use('/resources',express.static(__dirname + '/images'));
-So now, you can use http://localhost:5000/resources/myImage.jpg to serve all the images instead of http://localhost:5000/images/myImage.jpg. */
+
+//app.use('/resources',express.static(__dirname + '/images'));
+//So now, you can use http://localhost:5000/resources/myImage.jpg to serve all the images instead of http://localhost:5000/images/myImage.jpg. */
 //app.use('/', routes);
 //app.use('/index',routes);
+
 app.use('/spectrum/verify', Verify);
 app.use('/spectrum/register',Add);
 app.use('/spectrum/login',Login);
@@ -76,8 +84,12 @@ app.use('/spectrum/urinetest',Test);
 app.use('/spectrum/fetchurine',Fetch);
 app.use('/spectrum/personalinfo',Personalinfo);
 app.use('/spectrum/deviceinfo',Spectrometer);
-app.use('/spectrum/personalinformation',Personfetch);
+app.use('/spectrum/active',Personfetch);
 app.use('/spectrum/device',Device);
+app.use('/spectrum/relationship',Relationship);
+app.use('/spectrum/getrelation',GetRelation);
+app.use('/spectrum/feedback',Feedback);
+app.use('/image/upload', Ramana);
 //app.use('/spectrum/deviceinfo',Spectrometer);
 //app.use('/student',Student);
 // catch 404 and forward to error handler
@@ -110,6 +122,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
